@@ -53,6 +53,9 @@ def results():
     params = {
         # TODO: Enter query parameters here for the 'appid' (your api key),
         # the city, and the units (metric or imperial).
+        'appid': API_KEY,
+        'q': city,
+        'units': units
         # See the documentation here: https://openweathermap.org/current
 
     }
@@ -60,7 +63,7 @@ def results():
     result_json = requests.get(API_URL, params=params).json()
 
     # Uncomment the line below to see the results of the API call!
-    # pp.pprint(result_json)
+    pp.pprint(result_json)
 
     # TODO: Replace the empty variables below with their appropriate values.
     # You'll need to retrieve these from the result_json object above.
@@ -68,6 +71,7 @@ def results():
     # For the sunrise & sunset variables, I would recommend to turn them into
     # datetime objects. You can do so using the `datetime.fromtimestamp()`
     # function.
+
     context = {
         'date': datetime.now(),
         'city': '',
