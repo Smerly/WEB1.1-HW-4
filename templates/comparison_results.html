@@ -1,35 +1,38 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <section class="weather-form">
-    {# 
-        TODO: Replace the hard-coded cities and date below with data from the 
-        server.
-    #}
-    <h1>Weather in [CITY1] and [CITY2]</h1>
-    <p>[TODAYS_DATE]</p>
+	{# TODO: Replace the hard-coded cities and date below with data from the
+	server. #}
+	<h1>Weather in {{city1}} and {{city2}}</h1>
+	<p>{{date}}</p>
 
+	{# TODO: Add the temperature, description, and min & max temperature below.
+	Replace 'F' with the appropriate units. #}
+	<p>
+		<!-- {% if difference1 is defined %} It is {temp_diff} {{units}} warmer in
+        {{city1}} than in {{city2}} today. 
+        {% elif difference2 is defined %} 
+        It is
+		{temp_diff} {{units}} colder in {{city1}} than in {{city2}} today. {% endif
+        %}  -->
 
-    {#
-        TODO: Add the temperature, description, and min & max temperature below.
-        Replace 'F' with the appropriate units.
-    #}
-    <p>
-        It is [NUM_DEGREES] [UNITS] [WARMER/COLDER] in [CITY1] than in [CITY2] today.
-    </p>
+		It is {{temp_diff}} {{units}} {{temp_which}} in {{city1}} than in {{city2}}
+		today.
+	</p>
 
-    <p>
-        The humidity in [CITY1] is [AMOUNT] [GREATER/LESS] than in [CITY2].
-    </p>
+	<p>
+		The humidity in {{city1}} is {{humidity_diff}} {{humidity_which}} than in
+		{{city2}}.
+	</p>
 
-    <p>
-        The wind speed in [CITY1] is [AMOUNT] [GREATER/LESS] than in [CITY2].
-    </p>
+	<p>
+		The wind speed in {{city1}} is {{wind_speed_diff}} {{wind_speed_which}} than
+		in {{city2}}.
+	</p>
 
-    <p>
-        The sun sets in [CITY1] [HOURS] hours [EARLIER/LATER] than in [CITY2].
-    </p>
-    
+	<p>
+		The sun sets in {{city1}} {{sunset_diff}} hours different than in {{city2}}.
+	</p>
 </section>
 
 {% endblock %}

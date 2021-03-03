@@ -72,38 +72,75 @@ def results():
     # datetime objects. You can do so using the `datetime.fromtimestamp()`
     # function.
 
+    sunrise = datetime.fromtimestamp(result_json['sys']['sunrise'])
+    sunset = datetime.fromtimestamp(result_json['sys']['sunset'])
     context = {
         'date': datetime.now(),
-        'city': '',
-        'description': '',
-        'temp': '',
-        'humidity': '',
-        'wind_speed': '',
-        'sunrise': '',
-        'sunset': '',
+        'city': result_json['name'],
+        'description': result_json['weather'][0]['description'],
+        'temp': result_json['main']['temp'],
+        'humidity': result_json['main']['humidity'],
+        'wind_speed': result_json['wind']['speed'],
+        'sunrise': sunrise,
+        'sunset': sunset,
         'units_letter': get_letter_for_units(units)
     }
 
     return render_template('results.html', **context)
 
 
+# ---------------------
+
 @app.route('/comparison_results')
 def comparison_results():
     """Displays the relative weather for 2 different cities."""
     # TODO: Use 'request.args' to retrieve the cities & units from the query
     # parameters.
-    city1 = ''
-    city2 = ''
-    units = ''
+    city1 = request.args.get('city1')
+    city2 = request.args.get('city2')
+    units = request.args.get('units')
 
     # TODO: Make 2 API calls, one for each city. HINT: You may want to write a
     # helper function for this!
 
+    params1 = {
+        'appid': API_KEY,
+        'q': city1,
+        'units': units
+    }
+
+    params2 = {
+        'q': city2,
+        'appid': API_KEY,
+        'units': units
+    }
+
+    city1_json = requests.get(API_URL, params=params1).json()
+    city2_json = requests.get(API_URL, params=params2).json()
+
+    def diff(num1, num2):
+        if num1 > num2:
+            return 'warmer'
+        elif num1 < num2:
+            return 'colder'
     # TODO: Pass the information for both cities in the context. Make sure to
     # pass info for the temperature, humidity, wind speed, and sunset time!
     # HINT: It may be useful to create 2 new dictionaries, `city1_info` and
     # `city2_info`, to organize the data.
     context = {
+        'date': datetime.now(),
+        'city1': city1_json['name'],
+        'city2': city2_json['name'],
+        'temp_diff': (city1_json['main']['temp'] - city2_json['main']['temp']),
+        'temp_which': diff(city1_json['main']['temp'], city2_json['main']['temp']),
+        'humidity_diff': (city1_json['main']['humidity'] - city2_json['main']['humidity']),
+        'humidity_which': diff(city1_json['main']['humidity'], city2_json['main']['humidity']),
+        'wind_speed_diff': (city1_json['wind']['speed'] - city2_json['wind']['speed']),
+        'wind_speed_which': diff(city1_json['wind']['speed'], city2_json['wind']['speed']),
+        'sunset_diff': datetime.fromtimestamp(city1_json['sys']['sunrise'] - city2_json['sys']['sunrise']),
+        'sunset_which': diff(city1_json['sys']['sunrise'], city2_json['sys']['sunrise'])
+
+
 
     }
 
